@@ -6,7 +6,7 @@ defmodule Sitesx.Domain do
 
   require Logger
 
-  @domain Application.get_env(:sitesx, :domain)
+  @before_compile Sitesx.Config
 
   def extract_domain(host) do
     host

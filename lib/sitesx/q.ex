@@ -1,9 +1,8 @@
 defmodule Sitesx.Q do
   import Ecto.Query
-
   alias Sitesx.Domain
 
-  @app Application.get_env(:sitesx, :app)
+  @before_compile Sitesx.Config
 
   def findsite(conn) do
     case Domain.extract_subdomain(conn) do

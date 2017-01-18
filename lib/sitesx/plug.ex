@@ -1,7 +1,7 @@
 defmodule Sitesx.Plug do
   import Plug.Conn
 
-  @app Application.get_env(:sitesx, :app)
+  @before_compile Sitesx.Config
 
   def init(opts), do: opts
   def call(conn, opts) do

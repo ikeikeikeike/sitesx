@@ -1,7 +1,7 @@
 defmodule Sitesx.Helpers do
   alias Phoenix.HTML.SimplifiedHelpers.URL
 
-  @app Application.get_env(:sitesx, :app)
+  @before_compile Sitesx.Config
 
   def subdomain_url(conn, ctrl_act_param, opts \\ [])
 
