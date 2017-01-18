@@ -18,7 +18,7 @@ defmodule Sitesx.Helpers do
   end
 
   def subdomain_url(subdomain, conn, ctrl_act_param, opts) do
-    base = URI.parse cfg_app.Router.Helpers.url(conn)
+    base = URI.parse Module.concat(cfg_app, Router.Helpers).url(conn)
     path = URL.url_for conn, ctrl_act_param, opts
     u    = URI.merge base, path
 
