@@ -8,7 +8,7 @@ defmodule Sitesx.Q do
     case Domain.extract_subdomain(conn) do
       nil  -> nil
       name ->
-        from q in cfg_app.Site,
+        from q in Module.concat(cfg_app, Site),
           where: q.name == ^name
     end
   end
