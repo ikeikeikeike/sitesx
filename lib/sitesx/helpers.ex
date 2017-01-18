@@ -24,8 +24,8 @@ defmodule Sitesx.Helpers do
 
     key  = "subdomain_url:#{subdomain}:#{to_string(u)}:true"
     ConCache.get_or_store :sitesx, key, fn ->
-      cfg_app.Site
-      |> cfg_app.Repo.get_by(name: subdomain, dns: true)
+      Module.concat(cfg_app, Site)
+      |> Module.concat(cfg_app, Repo).get_by(name: subdomain, dns: true)
       |> (case do
         nil ->
           query =
