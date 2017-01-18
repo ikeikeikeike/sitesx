@@ -11,11 +11,8 @@ defmodule Sitesx.Config do
       app    = Application.get_env(:sitesx, :app)
       domain = Application.get_env(:sitesx, :domain)
 
-      @app app
-      def app, do: @app
-
-      @domain domain
-      def domain, do: @domain
+      def cfg_app, do: app
+      def cfg_domain, do: domain
     end
   end
 end

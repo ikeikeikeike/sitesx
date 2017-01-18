@@ -35,7 +35,9 @@ defmodule Sitesx.Domain do
     end
   end
 
-  def create_subdomain(subdomain, domain \\ @domain) do
+  def create_subdomain(subdomain, domain \\ nil) do
+    domain = domain || cfg_domain()
+
     case DomainRecord.all(domain) do
       {:ok, %{body: %{domain_records: records}}} ->
         if Enum.filter(records, & &1[:name] == domain) <= 0 do

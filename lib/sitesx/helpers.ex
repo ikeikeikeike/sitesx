@@ -18,14 +18,14 @@ defmodule Sitesx.Helpers do
   end
 
   def subdomain_url(subdomain, conn, ctrl_act_param, opts) do
-    base = URI.parse @app.Router.Helpers.url(conn)
+    base = URI.parse cfg_app.Router.Helpers.url(conn)
     path = URL.url_for conn, ctrl_act_param, opts
     u    = URI.merge base, path
 
     key  = "subdomain_url:#{subdomain}:#{to_string(u)}:true"
     ConCache.get_or_store :sitesx, key, fn ->
-      @app.Site
-      |> @app.Repo.get_by(name: subdomain, dns: true)
+      cfg_app.Site
+      |> cfg_app.Repo.get_by(name: subdomain, dns: true)
       |> (case do
         nil ->
           query =
