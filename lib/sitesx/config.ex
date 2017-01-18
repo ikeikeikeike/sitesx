@@ -8,11 +8,11 @@ defmodule Sitesx.Config do
 
   defmacro __before_compile__(_env) do
     quote do
-      app    = Application.get_env(:sitesx, :app)
-      domain = Application.get_env(:sitesx, :domain)
+      @app    Application.get_env(:sitesx, :app)
+      @domain Application.get_env(:sitesx, :domain)
 
-      def cfg_app, do: app
-      def cfg_domain, do: domain
+      def cfg_app, do: @app
+      def cfg_domain, do: @domain
     end
   end
 end
