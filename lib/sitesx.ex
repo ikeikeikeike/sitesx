@@ -10,7 +10,7 @@ defmodule Sitesx do
     children = [
       # Starts a worker by calling: Sitesx.Worker.start_link(arg1, arg2, arg3)
       # worker(Sitesx.Worker, [arg1, arg2, arg3]),
-      worker(ConCache, [[ttl_check: :timer.seconds(60), ttl: :timer.seconds(60 * 1)], [name: :sitesx]], id: :sitesx_cache),
+      worker(ConCache, [[ttl_check: :timer.seconds(30), ttl: :timer.seconds(60 * 1)], [name: :sitesx]], id: :sitesx_cache),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
