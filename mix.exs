@@ -14,7 +14,7 @@ defmodule Sitesx.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :con_cache, :public_suffix],
+    [applications: [:logger, :con_cache, :public_suffix, :ecto],
      mod: {Sitesx, []}]
   end
 
@@ -30,6 +30,7 @@ defmodule Sitesx.Mixfile do
   defp deps do
     [
       {:con_cache, "~> 0.11.1"},
+      {:ecto, "~> 2.1"},
       {:public_suffix, "~> 0.5"},
     ]
   end
