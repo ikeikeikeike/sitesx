@@ -5,10 +5,10 @@ defmodule Sitesx.Plug do
 
   def init(opts), do: opts
   def call(conn, opts) do
-    site = Module.concat cfg_app, Site
+    site = concat Site
 
     with qs when not is_nil(qs) <- Sitesx.Q.findsite(conn),
-         md when not is_nil(md) <- Module.concat(cfg_app, Repo).one(qs)
+         md when not is_nil(md) <- concat(Repo).one(qs)
     do
            put_private conn, :sitesx_model, md
     else

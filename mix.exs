@@ -3,7 +3,7 @@ defmodule Sitesx.Mixfile do
 
   def project do
     [app: :sitesx,
-     version: "0.1.0",
+     version: "0.1.1",
      elixir: "~> 1.3",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -14,7 +14,7 @@ defmodule Sitesx.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :con_cache, :public_suffix, :ecto],
+    [applications: [:logger, :con_cache, :public_suffix, :ecto, :plug],
      mod: {Sitesx, []}]
   end
 
@@ -29,8 +29,9 @@ defmodule Sitesx.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:con_cache, "~> 0.11.1"},
       {:ecto, "~> 2.1"},
+      {:plug, "~> 1.3"},
+      {:con_cache, "~> 0.11.1"},
       {:public_suffix, "~> 0.5"},
     ]
   end
