@@ -28,6 +28,10 @@ defmodule Sitesx.Domain do
     end
   end
 
+  def ensured_subdomain?(subdomain) do
+    ensured_domain? "#{subdomain}.#{xdomain()}"
+  end
+
   def ensured_domain?(host) do
     case :inet_res.nslookup('#{host}', 1, :a) do
       {:ok, _}    -> true
