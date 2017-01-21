@@ -1,6 +1,6 @@
 defmodule Sitesx.Domain do
   import PublicSuffix
-  import Chexes, only: [present?: 1]
+  import Chexes, only: [present?: 1, blank?: 1]
 
   alias Oceanex.Resource.DomainRecord
 
@@ -40,7 +40,7 @@ defmodule Sitesx.Domain do
 
     case DomainRecord.all(domain) do
       {:ok, %{body: %{domain_records: records}}} ->
-        if Enum.filter(records, & &1[:name] == domain) <= 0 do
+        if blank? Enum.filter(records, & &1[:name] == domain) do
           record =
             records
             |> Enum.filter(& &1[:name] == "@")
