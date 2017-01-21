@@ -40,7 +40,9 @@ defmodule Sitesx.Q do
         where: q.name == ^subdomain,
         limit: 1
 
-    unless exists?(queryable) do
+    if exists?(queryable) do
+      {:get, repo.one(queryable)}
+    else
       args      = [struct(site), %{"name" => subdomain}]
       changeset = apply site, :changeset, args
 
@@ -48,8 +50,6 @@ defmodule Sitesx.Q do
       Domain.create_subdomain subdomain, domain
 
       {:new, new}
-    else
-      {:get, repo.one(queryable)}
     end
   end
 
