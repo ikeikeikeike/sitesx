@@ -44,10 +44,10 @@ defmodule Sitesx.Q do
       args      = [struct(site), %{"name" => subdomain}]
       changeset = apply site, :changeset, args
 
-      repo.insert! changeset
+      new = repo.insert! changeset
       Domain.create_subdomain subdomain, domain
 
-      {:new, site}
+      {:new, new}
     else
       {:get, repo.one(queryable)}
     end
