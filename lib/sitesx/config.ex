@@ -11,12 +11,10 @@ defmodule Sitesx.Config do
       @app    Application.get_env(:sitesx, :otp_app)
       @domain Application.get_env(:sitesx, :domain)
 
-      def cfg_app, do: @app
-      def cfg_domain, do: @domain
-
-      def concat(module) do
-        Module.concat cfg_app(), module
-      end
+      def xdomain,  do: @domain
+      def xhelpers, do: Module.concat @app, Router.Helpers
+      def xrepo,    do: Module.concat @app, Repo
+      def xsite,    do: Module.concat @app, Site
     end
   end
 end

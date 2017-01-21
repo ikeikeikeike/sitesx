@@ -36,7 +36,7 @@ defmodule Sitesx.Domain do
   end
 
   def create_subdomain(subdomain, domain \\ nil) do
-    domain = domain || cfg_domain()
+    domain = domain || xdomain()
 
     case DomainRecord.all(domain) do
       {:ok, %{body: %{domain_records: records}}} ->

@@ -14,7 +14,7 @@ defmodule Sitesx.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :con_cache, :public_suffix, :ecto, :plug],
+    [applications: [:logger, :con_cache, :public_suffix, :ecto, :plug, :chexes, :phoenix_html_simplified_helpers],
      mod: {Sitesx, []}]
   end
 
@@ -31,8 +31,11 @@ defmodule Sitesx.Mixfile do
     [
       {:ecto, "~> 2.1"},
       {:plug, "~> 1.3"},
-      {:con_cache, "~> 0.11.1"},
+      {:oceanex, "~> 0.2"},
+      {:con_cache, "~> 0.11"},
       {:public_suffix, "~> 0.5"},
+      {:chexes, github: "ikeikeikeike/chexes"},
+      {:phoenix_html_simplified_helpers, "~> 1.0"},
     ]
   end
 end
