@@ -1,41 +1,50 @@
 defmodule Sitesx.Mixfile do
   use Mix.Project
 
+  @description """
+  A Phoenix SubDomainer which makes subdomain using DigitalOcean, Cloudflare, etc. API and contains convenient view helper interface along with Plug and Ecto
+  """
+
   def project do
     [app: :sitesx,
-     version: "0.1.1",
-     elixir: "~> 1.3",
+     name: "Sitesx",
+     version: "0.1.2",
+     elixir: ">= 1.4",
+     description: @description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     deps: deps()]
+     package: package(),
+     deps: deps(),
+     source_url: "https://github.com/ikeikeikeike/sitesx"
+   ]
   end
 
-  # Configuration for the OTP application
-  #
-  # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :con_cache, :public_suffix, :ecto, :plug, :chexes, :phoenix_html_simplified_helpers],
-     mod: {Sitesx, []}]
+    [extra_applications: [:logger, :con_cache, :public_suffix, :ecto, :plug, :chexes, :phoenix_html_simplified_helpers],
+     mod: {Sitesx.Application, []}]
   end
 
-  # Dependencies can be Hex packages:
-  #
-  #   {:mydep, "~> 0.3.0"}
-  #
-  # Or git/path repositories:
-  #
-  #   {:mydep, git: "https://github.com/elixir-lang/mydep.git", tag: "0.1.0"}
-  #
-  # Type "mix help deps" for more examples and options
   defp deps do
     [
       {:ecto, "~> 2.1"},
       {:plug, "~> 1.3"},
-      {:oceanex, "~> 0.2"},
-      {:con_cache, "~> 0.11"},
+      {:con_cache, "~> 0.12"},
       {:public_suffix, "~> 0.5"},
       {:chexes, github: "ikeikeikeike/chexes"},
-      {:phoenix_html_simplified_helpers, "~> 1.0"},
+      {:phoenix_html_simplified_helpers, "~> 1.1"},
+
+      {:oceanex, "~> 0.2", optional: true},
+
+      {:credo, "~> 0.8", only: :dev},
+      {:earmark, "~> 1.2", only: :dev},
+      {:ex_doc, "~> 0.16", only: :dev},
+      {:inch_ex, ">= 0.0.0",  only: :docs},
     ]
+  end
+
+  defp package do
+    [ maintainers: ["Tatsuo Ikeda / ikeikeikeike"],
+      licenses: ["MIT"],
+      links: %{"github" => "https://github.com/ikeikeikeike/sitesx"} ]
   end
 end
