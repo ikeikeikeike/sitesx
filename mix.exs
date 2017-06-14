@@ -29,7 +29,6 @@ defmodule Sitesx.Mixfile do
       :plug,
       :chexes,
       :phoenix_html_simplified_helpers,
-      :inet_res,
     ], mod: {Sitesx.Application, []}]
   end
 
@@ -37,11 +36,13 @@ defmodule Sitesx.Mixfile do
     [
       {:ecto, "~> 2.1"},
       {:plug, "~> 1.3"},
-      {:con_cache, "~> 0.12"},
-      {:public_suffix, "~> 0.5"},
-      {:chexes, github: "ikeikeikeike/chexes"},
-      {:phoenix_html_simplified_helpers, "~> 1.1"},
 
+      {:chexes, github: "ikeikeikeike/chexes"},
+      {:con_cache, "~> 0.12"},
+      {:phoenix_html_simplified_helpers, "~> 1.1"},
+      {:public_suffix, "~> 0.5"},
+
+      {:httpoison, "~> 0.11", override: true},
       {:oceanex, "~> 0.2", optional: true},
       # Below is for oceanex, it's having old packages.
       {:idna, "~> 5.0.2", optional: true, override: true},
@@ -55,8 +56,8 @@ defmodule Sitesx.Mixfile do
   end
 
   defp package do
-    [ maintainers: ["Tatsuo Ikeda / ikeikeikeike"],
-      licenses: ["MIT"],
-      links: %{"github" => "https://github.com/ikeikeikeike/sitesx"} ]
+    [maintainers: ["Tatsuo Ikeda / ikeikeikeike"],
+     licenses: ["MIT"],
+     links: %{"github" => "https://github.com/ikeikeikeike/sitesx"}]
   end
 end

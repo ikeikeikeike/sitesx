@@ -10,7 +10,7 @@ defmodule Sitesx.Domain do
       @before_compile Sitesx.Config
 
       import PublicSuffix
-      import Chexes, only: [present?: 1]
+      import Chexes, only: [present?: 1, blank?: 1]
 
       def extract_domain(host) do
         host
