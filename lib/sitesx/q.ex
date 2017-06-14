@@ -1,15 +1,16 @@
 defmodule Sitesx.Q do
+  @moduledoc """
+  Ecto Query Helper
+  """
   import Ecto.Query
   alias Sitesx.Domain
 
   @before_compile Sitesx.Config
 
   def findsite(conn) do
-    case Domain.extract_subdomain(conn) do
-      nil  -> nil
-      name ->
-        from q in xsite(),
-          where: q.name == ^name
+    if name = Domain.extract_subdomain(conn) do
+      from q in xsite(),
+        where: q.name == ^name
     end
   end
 

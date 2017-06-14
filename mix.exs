@@ -2,14 +2,15 @@ defmodule Sitesx.Mixfile do
   use Mix.Project
 
   @description """
-  A Phoenix SubDomainer which makes subdomain using DigitalOcean, Cloudflare, etc. API and contains convenient view helper interface along with Plug and Ecto
+  A Phoenix SubDomainer which makes subdomain using DigitalOcean, Cloudflare, etc.
+  API and contains convenient view helper interface along with Plug and Ecto
   """
 
   def project do
     [app: :sitesx,
      name: "Sitesx",
      version: "0.1.2",
-     elixir: ">= 1.4",
+     elixir: ">= 1.4.0",
      description: @description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
@@ -20,8 +21,16 @@ defmodule Sitesx.Mixfile do
   end
 
   def application do
-    [extra_applications: [:logger, :con_cache, :public_suffix, :ecto, :plug, :chexes, :phoenix_html_simplified_helpers],
-     mod: {Sitesx.Application, []}]
+    [extra_applications: [
+      :logger,
+      :con_cache,
+      :public_suffix,
+      :ecto,
+      :plug,
+      :chexes,
+      :phoenix_html_simplified_helpers,
+      :inet_res,
+    ], mod: {Sitesx.Application, []}]
   end
 
   defp deps do
