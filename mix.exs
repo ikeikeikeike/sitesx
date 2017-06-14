@@ -34,6 +34,9 @@ defmodule Sitesx.Mixfile do
       {:phoenix_html_simplified_helpers, "~> 1.1"},
 
       {:oceanex, "~> 0.2", optional: true},
+      # Below is for oceanex, it's having old packages.
+      {:idna, "~> 5.0.2", optional: true, override: true},
+      {:hackney, "~> 1.8", optional: true, override: true},
 
       {:credo, "~> 0.8", only: :dev},
       {:earmark, "~> 1.2", only: :dev},
