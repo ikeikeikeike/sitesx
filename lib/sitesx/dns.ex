@@ -1,4 +1,4 @@
-defmodule Sitesx.Domain do
+defmodule Sitesx.DNS do
   alias HTTPoison.{Response, AsyncResponse}
 
   @callback create_subdomain(subdomain::String.t, domain::String.t) :: {:ok, Response.t | AsyncResponse.t}
@@ -33,7 +33,7 @@ defmodule Sitesx.Domain do
       end
 
       def ensured_subdomain?(subdomain) do
-        ensured_domain? "#{subdomain}.#{xdomain()}"
+        ensured_domain? "#{subdomain}.#{sitesx_domain()}"
       end
 
       def ensured_domain?(host) do

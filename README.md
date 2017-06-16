@@ -21,3 +21,47 @@ def application do
   [applications: [:sitesx]]
 end
 ```
+
+3. Sitesx needs to add a migration:
+
+```elixir
+defmodule MyApp.Repo.Migrations.CreateSitesx do
+  use Ecto.Migration
+
+  def change do
+    create table(:sitesx) do
+      add :name, :string
+      add :dns, :boolean, default: false
+
+      timestamps()
+    end
+    create index(:sites, [:name], unique: true)
+    create index(:sites, [:dns])
+
+  end
+end
+```
+
+4. After definition, needs to add a model:
+
+```elixir
+defmodule MyApp.Sitex do
+  use MyApp.Web, :model
+
+  schema "sitesx" do
+    field :name, :string
+    field :dns, :boolean
+
+    timestamps()
+  end
+
+  def changeset(struct, params \\ %{}) do
+    struct
+    |> cast(params, [:name dns])
+    |> validate_required([:name])
+    |> unique_constraint(:name)
+  end
+end
+```
+
+Mix command.

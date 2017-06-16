@@ -1,15 +1,15 @@
-defmodule Sitesx.Domain.Digitalocean do
+defmodule Sitesx.DNS.Digitalocean do
   @moduledoc """
   Uses DigitalOcean API
   """
-  use Sitesx.Domain
+  use Sitesx.DNS
 
   alias Oceanex.Resource.DomainRecord
 
   require Logger
 
   def create_subdomain(subdomain, domain \\ nil) do
-    domain = domain || xdomain()
+    domain = domain || sitesx_domain()
 
     case DomainRecord.all(domain) do
       {:ok, %{body: %{domain_records: records}}} ->

@@ -9,7 +9,7 @@ defmodule Sitesx.Q do
 
   def findsite(conn) do
     if name = Domain.extract_subdomain(conn) do
-      from q in xsite(),
+      from q in sitesx_site(),
         where: q.name == ^name
     end
   end
@@ -25,7 +25,7 @@ defmodule Sitesx.Q do
   def exists?(queryable) do
     queryable
     |> from(select: 1, limit: 1)
-    |> xrepo().all
+    |> sitesx_repo().all
     |> case do
       [] -> false
       _  -> true
@@ -33,8 +33,8 @@ defmodule Sitesx.Q do
   end
 
   def get_or_create(subdomain, domain \\ nil) do
-    site = xsite()
-    repo = xrepo()
+    site = sitesx_site()
+    repo = sitesx_repo()
 
     queryable =
       from q in site,
@@ -48,7 +48,7 @@ defmodule Sitesx.Q do
       changeset = apply site, :changeset, args
 
       new = repo.insert! changeset
-      Domain.create_subdomain subdomain, domain
+      sitesx_dns().create_subdomain subdomain, domain
 
       {:new, new}
     end
