@@ -63,5 +63,4 @@ defmodule MyApp.Sitex do
   end
 end
 ```
-
-Mix command.
+Mix commands `$ mix sitesx.gen.model` or `$ mix sitesx.gen.schema` will be able to generate No.3 and No.4 instead of define manually.
