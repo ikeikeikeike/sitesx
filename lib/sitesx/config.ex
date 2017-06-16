@@ -13,10 +13,10 @@ defmodule Sitesx.Config do
       dns = Application.get_env(:sitesx, :dns) || []
       @dns(case dns[:provider] || dns do
         :digitalocean ->
-          Sitesx.Domain.Digitalocean
+          Sitesx.DNS.Digitalocean
 
         :cloudflare when not is_binary(dns) ->
-          Sitesx.Domain.Cloudflare
+          Sitesx.DNS.Cloudflare
 
         _ ->
           raise ArgumentError,

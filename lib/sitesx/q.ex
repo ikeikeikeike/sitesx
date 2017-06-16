@@ -3,12 +3,11 @@ defmodule Sitesx.Q do
   Ecto Query Helper
   """
   import Ecto.Query
-  alias Sitesx.Domain
 
   @before_compile Sitesx.Config
 
   def findsite(conn) do
-    if name = Domain.extract_subdomain(conn) do
+    if name = sitesx_dns().extract_subdomain(conn) do
       from q in sitesx_site(),
         where: q.name == ^name
     end

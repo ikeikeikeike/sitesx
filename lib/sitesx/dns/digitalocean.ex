@@ -6,10 +6,8 @@ defmodule Sitesx.DNS.Digitalocean do
 
   alias Oceanex.Resource.DomainRecord
 
-  require Logger
-
-  def create_subdomain(subdomain, domain \\ nil) do
-    domain = domain || sitesx_domain()
+  def create_subdomain(subdomain, params \\ []) do
+    {domain, _} = Keyword.pop params, :domain, sitesx_domain()
 
     case DomainRecord.all(domain) do
       {:ok, %{body: %{domain_records: records}}} ->
@@ -29,12 +27,10 @@ defmodule Sitesx.DNS.Digitalocean do
         end
 
       {:ok, %{body: %{id: reason}}} ->
-        {:error, "#{domain}: #{reason}"}
+        {:error, reason}
 
       unknown ->
-        Logger.error inspect(unknown)
-        {:error, "unknown error"}
+        {:error, unknown}
     end
   end
-
 end

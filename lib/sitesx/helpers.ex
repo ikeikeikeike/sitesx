@@ -6,7 +6,7 @@ defmodule Sitesx.Helpers do
   def subdomain_url(conn, ctrl_act_param, opts \\ [])
 
   def subdomain_url(%Plug.Conn{} = conn, ctrl_act_param, opts) do
-    case Sitesx.Domain.extract_subdomain(conn) do
+    case sitesx_dns().extract_subdomain(conn) do
       nil       -> URL.url_for conn, ctrl_act_param, opts
       subdomain -> subdomain_url subdomain, conn, ctrl_act_param, opts
     end

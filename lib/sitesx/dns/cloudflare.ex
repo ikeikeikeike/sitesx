@@ -83,10 +83,21 @@ defmodule Sitesx.DNS.Cloudflare do
     POST zones/:zone_identifier/dns_records
     """
     def create_dns_record(params) do
-      params        = transform params
-      {zid, params} = Keyword.pop params, :zone_identifier
+      params           = transform params
+      {zid, params}    = Keyword.pop params, :zone_identifier
+      {name, params}   = Keyword.pop params, :name
+      {domain, params} = Keyword.pop params, :domain, Application.get_env(:sitesx, :domain)
 
-      post "/zones/#{zid || dns_env(:zone_identifier)}/dns_records", {:form, params}
+      params =
+        Keyword.merge(params, [
+          type: "CNAME",
+          name: "#{name}.#{domain}",
+          content: domain,
+          proxied: true,
+        ])
+
+      body = Poison.encode! Enum.into(params, %{})
+      post "/zones/#{zid || dns_env(:zone_identifier)}/dns_records", body
     end
   end
 
@@ -94,8 +105,22 @@ defmodule Sitesx.DNS.Cloudflare do
   Implementats domain behavior
   """
   use Sitesx.DNS
+  alias __MODULE__.API
 
-  def create_subdomain(subdomain, domain \\ nil) do
+  def create_subdomain(subdomain, params \\ []) do
+    case API.list_dns_records(params) do
+      {:ok, %{body: %{"success" => true, "result" => records}}} ->
+        if blank? Enum.filter(records, &String.starts_with?(&1["name"], "#{subdomain}.")) do
+          API.create_dns_record name: subdomain
+        else
+          {:error, "duplicated subdomain"}
+        end
+
+      {:ok, %{body: %{"success" => false, "errors" => errors}}} ->
+        {:error, errors}
+
+      unknown ->
+        {:error, unknown}
+    end
   end
-
 end
