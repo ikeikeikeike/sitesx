@@ -5,12 +5,23 @@ defmodule Sitesx.DNS do
   ## Example
 
       use Sitesx.DNS
+
+  then must be implemented create_subdomain
   """
 
   alias HTTPoison.{Response, AsyncResponse}
 
-  @callback create_subdomain(subdomain::String.t, domain::String.t) :: {:ok, Response.t | AsyncResponse.t}
-                                                                     | {:error, Error.t}
+  @doc """
+  Create subdomain if not exists.
+
+  ## Example
+
+      dns = Sitesx.App.dns
+      dns.create_subdomain "www"
+  """
+  @callback create_subdomain(subdomain::String.t, domain::String.t) ::
+    {:ok, Response.t | AsyncResponse.t} |
+    {:error, Error.t}
 
   defmacro __using__(_) do
     quote do
@@ -19,17 +30,18 @@ defmodule Sitesx.DNS do
       import PublicSuffix
       import Chexes, only: [present?: 1, blank?: 1]
 
-      alias Sitesx.Config
+      alias Sitesx.App
 
       @doc """
       Extract domain from hostname
 
       ## Example
 
-          dns = Sitesx.Config.dns
+          dns = Sitesx.App.dns
           dns.extract_domain "www.example.com"
           #-> "example"
       """
+      @spec extract_domain(String.t) :: String.t | nil
       def extract_domain(host) do
         host
         |> String.downcase
@@ -43,7 +55,7 @@ defmodule Sitesx.DNS do
 
       ## Example
 
-          dns = Sitesx.Config.dns
+          dns = Sitesx.App.dns
           dns.extract_domain conn
           #-> "www"
       """
@@ -65,12 +77,13 @@ defmodule Sitesx.DNS do
 
       ## Example
 
-          dns = Sitesx.Config.dns
+          dns = Sitesx.App.dns
           dns.ensured_subdomain? "www"
           #-> false
       """
+      @spec ensured_subdomain?(String.t) :: boolean
       def ensured_subdomain?(subdomain) do
-        ensured_domain? "#{subdomain}.#{Config.domain}"
+        ensured_domain? "#{subdomain}.#{App.domain}"
       end
 
       @doc """
@@ -78,10 +91,11 @@ defmodule Sitesx.DNS do
 
       ## Example
 
-          dns = Sitesx.Config.dns
+          dns = Sitesx.App.dns
           dns.ensured_domain? "www.example.com"
           #-> ture
       """
+      @spec ensured_domain?(String.t) :: boolean
       def ensured_domain?(host) do
         case :inet_res.nslookup('#{host}', 1, :a) do
           {:ok, _}    -> true

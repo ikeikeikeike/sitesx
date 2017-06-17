@@ -1,4 +1,4 @@
-defmodule Sitesx.Config do
+defmodule Sitesx.App do
   @moduledoc """
   Configuration from mix config and environment variable.
 
@@ -6,7 +6,7 @@ defmodule Sitesx.Config do
 
   ## Options
 
-    * `:auto_add_interval` - default: 0 secs (disabled)
+    * `:ensure_domain_interval` - default: 0 secs (disabled)
     * `:request_options` - default: [ssl: [{:versions, [:"tlsv1.2"]}]]
 
   ## Mix: Cloudflare
@@ -14,7 +14,7 @@ defmodule Sitesx.Config do
       config :sitesx,
         otp_app: MyApp,
         domain: "example.com",
-        auto_add_interval: 300,
+        ensure_domain_interval: 300,
         dns: [
           provider: :cloudflare,
           auth_email: "mail@example.com",
@@ -73,9 +73,9 @@ defmodule Sitesx.Config do
         def domain,  do: @domain
 
         @doc """
-        helpers function returns view heloper like Phoenix and Plug
+        helper function returns view heloper like Phoenix and Plug
         """
-        def helpers, do: Module.concat @app, Router.Helpers
+        def helper, do: Module.concat @app, Router.Helpers
 
         @doc """
         Ecto
@@ -85,7 +85,7 @@ defmodule Sitesx.Config do
         @doc """
         repo function returns Sitesx model from your phoenix application.
         """
-        def site,    do: Module.concat @app, Sitex
+        def site,    do: Module.concat @app, Sitesx
       end
     end
   end

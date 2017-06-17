@@ -3,7 +3,7 @@ use Mix.Config
 config :sitesx,
   otp_app: Yavd,             # OR     : Mix.Project.config[:app]
   domain: "example.com",
-  auto_add_interval: 300,    # Default: 0 secs (disabled)
+  ensure_domain_interval: 300,    # Default: 0 secs (disabled)
   # request_options: [ssl: [{:versions, [:"tlsv1.2"]}]],
   dns: [
     provider: :cloudflare,

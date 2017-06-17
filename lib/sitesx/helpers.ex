@@ -1,11 +1,23 @@
 defmodule Sitesx.Helpers do
-  alias Sitesx.Config
+  @moduledoc """
+  Generate URL with subdomain for controller or templates along with `Phoenix.HTML.SimplifiedHelpers.URL`
+
+  ## Example
+
+      subdomain_url(@conn, "entry.latest")
+      #->
+
+      subdomain_url("www", @conn, "page.index")
+      #->
+
+  """
+  alias Sitesx.App
   alias Phoenix.HTML.SimplifiedHelpers.URL
 
   def subdomain_url(conn, ctrl_act_param, opts \\ [])
 
   def subdomain_url(%Plug.Conn{} = conn, ctrl_act_param, opts) do
-    case Config.dns().extract_subdomain(conn) do
+    case App.dns().extract_subdomain(conn) do
       nil       -> URL.url_for conn, ctrl_act_param, opts
       subdomain -> subdomain_url subdomain, conn, ctrl_act_param, opts
     end
@@ -17,14 +29,14 @@ defmodule Sitesx.Helpers do
   end
 
   def subdomain_url(subdomain, conn, ctrl_act_param, opts) do
-    base = URI.parse Config.helpers().url(conn)
+    base = URI.parse App.helper().url(conn)
     path = URL.url_for conn, ctrl_act_param, opts
     u    = URI.merge base, path
 
     key  = "subdomain_url:#{subdomain}:#{to_string(u)}:true"
     ConCache.get_or_store :sitesx, key, fn ->
-      Config.site()
-      |> Config.repo().get_by(name: subdomain, dns: true)
+      App.site()
+      |> App.repo().get_by(name: subdomain, dns: true)
       |> (case do
         nil ->
           query =

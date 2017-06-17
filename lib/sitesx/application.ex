@@ -12,6 +12,7 @@ defmodule Sitesx.Application do
     children = [
       # Starts a worker by calling: Sitesx.Worker.start_link(arg1, arg2, arg3)
       # worker(Sitesx.Worker, [arg1, arg2, arg3]),
+      worker(Sitesx.EnsureDomain, []),
       worker(ConCache, [[ttl_check: :timer.seconds(30), ttl: :timer.seconds(60 * 1)], [name: :sitesx]], id: :sitesx_cache),
     ]
 

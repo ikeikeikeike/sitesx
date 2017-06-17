@@ -4,7 +4,7 @@ defmodule Sitesx.DNS.Cloudflare do
 
   ## Example
 
-      iex(1)> dns = Sitesx.Config.dns
+      iex(1)> dns = Sitesx.App.dns
       Sitesx.DNS.Cloudflare
       iex(2)> dns.
       create_subdomain/1      create_subdomain/2      ensured_domain?/1
@@ -16,6 +16,16 @@ defmodule Sitesx.DNS.Cloudflare do
   use Sitesx.DNS
   alias __MODULE__.API
 
+  @doc """
+  Create subdomain if not exists through the Cloudflare DNS API
+
+  ## Example
+
+      dns = Sitesx.App.dns
+      dns.create_subdomain "www"
+  """
+  @spec create_subdomain(subdomain::String.t, domain::String.t) :: {:ok, Response.t | AsyncResponse.t}
+                                                                 | {:error, Error.t}
   def create_subdomain(subdomain, params \\ []) do
     case API.list_dns_records(params) do
       {:ok, %{body: %{"success" => true, "result" => records}}} ->
