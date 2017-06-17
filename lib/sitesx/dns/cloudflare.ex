@@ -1,6 +1,42 @@
 defmodule Sitesx.DNS.Cloudflare do
+  @moduledoc """
+  Implementats domain behavior for Cloudflare DNS API
+
+  ## Example
+
+      iex(1)> dns = Sitesx.Config.dns
+      Sitesx.DNS.Cloudflare
+      iex(2)> dns.
+      create_subdomain/1      create_subdomain/2      ensured_domain?/1
+      ensured_subdomain?/1    extract_domain/1        extract_subdomain/1
+
+      iex(2)> dns.create_subdomain "subdomain-name"
+      {:ok, result}
+  """
+  use Sitesx.DNS
+  alias __MODULE__.API
+
+  def create_subdomain(subdomain, params \\ []) do
+    case API.list_dns_records(params) do
+      {:ok, %{body: %{"success" => true, "result" => records}}} ->
+        if blank? Enum.filter(records, &String.starts_with?(&1["name"], "#{subdomain}.")) do
+          API.create_dns_record name: subdomain
+        else
+          {:error, "duplicated subdomain"}
+        end
+
+      {:ok, %{body: %{"success" => false, "errors" => errors}}} ->
+        {:error, errors}
+
+      unknown ->
+        {:error, unknown}
+    end
+  end
+
   defmodule API do
     @moduledoc """
+    `list_dns_records`, `create_dns_record` functions.
+
     - List: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
     - Create: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
     """
@@ -98,29 +134,6 @@ defmodule Sitesx.DNS.Cloudflare do
 
       body = Poison.encode! Enum.into(params, %{})
       post "/zones/#{zid || dns_env(:zone_identifier)}/dns_records", body
-    end
-  end
-
-  @moduledoc """
-  Implementats domain behavior
-  """
-  use Sitesx.DNS
-  alias __MODULE__.API
-
-  def create_subdomain(subdomain, params \\ []) do
-    case API.list_dns_records(params) do
-      {:ok, %{body: %{"success" => true, "result" => records}}} ->
-        if blank? Enum.filter(records, &String.starts_with?(&1["name"], "#{subdomain}.")) do
-          API.create_dns_record name: subdomain
-        else
-          {:error, "duplicated subdomain"}
-        end
-
-      {:ok, %{body: %{"success" => false, "errors" => errors}}} ->
-        {:error, errors}
-
-      unknown ->
-        {:error, unknown}
     end
   end
 end

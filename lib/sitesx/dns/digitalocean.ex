@@ -1,13 +1,24 @@
 defmodule Sitesx.DNS.Digitalocean do
   @moduledoc """
-  Uses DigitalOcean API
+  Implementats domain behavior for Digitalocean DNS API
+
+  ## Example
+
+      iex(1)> dns = Sitesx.Config.dns
+      Sitesx.DNS.Digitalocean
+      iex(2)> dns.
+      create_subdomain/1      create_subdomain/2      ensured_domain?/1
+      ensured_subdomain?/1    extract_domain/1        extract_subdomain/1
+
+      iex(2)> dns.create_subdomain "sub-domain"
   """
   use Sitesx.DNS
 
+  alias Sitesx.Config
   alias Oceanex.Resource.DomainRecord
 
   def create_subdomain(subdomain, params \\ []) do
-    {domain, _} = Keyword.pop params, :domain, sitesx_domain()
+    {domain, _} = Keyword.pop params, :domain, Config.domain
 
     case DomainRecord.all(domain) do
       {:ok, %{body: %{domain_records: records}}} ->

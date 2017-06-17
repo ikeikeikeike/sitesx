@@ -1,5 +1,11 @@
 # Sitesx
 
+[![Build Status](http://img.shields.io/travis/ikeikeikeike/sitesx.svg?style=flat-square)](http://travis-ci.org/ikeikeikeike/sitesx)
+[![Ebert](https://ebertapp.io/github/ikeikeikeike/sitesx.svg)](https://ebertapp.io/github/ikeikeikeike/sitesx)
+[![Hex version](https://img.shields.io/hexpm/v/sitesx.svg "Hex version")](https://hex.pm/packages/sitesx)
+[![Inline docs](https://inch-ci.org/github/ikeikeikeike/sitesx.svg)](http://inch-ci.org/github/ikeikeikeike/sitesx)
+[![Lisence](https://img.shields.io/hexpm/l/ltsv.svg)](https://github.com/ikeikeikeike/sitesx/blob/master/LICENSE)
+
 A Phoenix SubDomainer which makes subdomain using DigitalOcean, Cloudflare, etc. API and contains convenient view helper interface along with Plug and Ecto
 
 ## Installation
@@ -106,3 +112,6 @@ defmodule MyApp.Sitesx do
   end
 end
 ```
+## Documentation
+
+hexdocs: https://hexdocs.pm/sitesx

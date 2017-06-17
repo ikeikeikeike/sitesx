@@ -1,5 +1,6 @@
 defmodule Sitesx do
   @moduledoc """
-  Documentation for Sitesx.
+  A Phoenix SubDomainer which makes subdomain using DigitalOcean, Cloudflare, etc.
+  API and contains convenient view helper interface along with Plug and Ecto
   """
 end

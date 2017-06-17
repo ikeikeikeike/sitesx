@@ -4,17 +4,17 @@ defmodule Sitesx.Q do
   """
   import Ecto.Query
 
-  @before_compile Sitesx.Config
+  alias Sitesx.Config
 
   def findsite(conn) do
-    if name = sitesx_dns().extract_subdomain(conn) do
-      from q in sitesx_site(),
+    if name = Config.dns().extract_subdomain(conn) do
+      from q in Config.site(),
         where: q.name == ^name
     end
   end
 
   def with_site(queryable, conn) do
-    if site = conn.private.sitesx_model do
+    if site = conn.private.sitesx.model do
       from q in queryable, where: q.site_id == ^(site.id)
     else
       queryable
@@ -24,7 +24,7 @@ defmodule Sitesx.Q do
   def exists?(queryable) do
     queryable
     |> from(select: 1, limit: 1)
-    |> sitesx_repo().all
+    |> Config.repo().all
     |> case do
       [] -> false
       _  -> true
@@ -32,8 +32,8 @@ defmodule Sitesx.Q do
   end
 
   def get_or_create(subdomain, domain \\ nil) do
-    site = sitesx_site()
-    repo = sitesx_repo()
+    site = Config.site()
+    repo = Config.repo()
 
     queryable =
       from q in site,
@@ -47,7 +47,7 @@ defmodule Sitesx.Q do
       changeset = apply site, :changeset, args
 
       new = repo.insert! changeset
-      sitesx_dns().create_subdomain subdomain, domain
+      Config.dns().create_subdomain subdomain, domain
 
       {:new, new}
     end

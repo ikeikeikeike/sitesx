@@ -1,12 +1,11 @@
 defmodule Sitesx.Helpers do
+  alias Sitesx.Config
   alias Phoenix.HTML.SimplifiedHelpers.URL
-
-  @before_compile Sitesx.Config
 
   def subdomain_url(conn, ctrl_act_param, opts \\ [])
 
   def subdomain_url(%Plug.Conn{} = conn, ctrl_act_param, opts) do
-    case sitesx_dns().extract_subdomain(conn) do
+    case Config.dns().extract_subdomain(conn) do
       nil       -> URL.url_for conn, ctrl_act_param, opts
       subdomain -> subdomain_url subdomain, conn, ctrl_act_param, opts
     end
@@ -18,14 +17,14 @@ defmodule Sitesx.Helpers do
   end
 
   def subdomain_url(subdomain, conn, ctrl_act_param, opts) do
-    base = URI.parse sitesx_helpers().url(conn)
+    base = URI.parse Config.helpers().url(conn)
     path = URL.url_for conn, ctrl_act_param, opts
     u    = URI.merge base, path
 
     key  = "subdomain_url:#{subdomain}:#{to_string(u)}:true"
     ConCache.get_or_store :sitesx, key, fn ->
-      sitesx_site()
-      |> sitesx_repo().get_by(name: subdomain, dns: true)
+      Config.site()
+      |> Config.repo().get_by(name: subdomain, dns: true)
       |> (case do
         nil ->
           query =
