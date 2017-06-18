@@ -6,8 +6,8 @@ defmodule Sitesx.App do
 
   ## Options
 
-    * `:ensure_domain_interval` - default: 0 secs (disabled)
-    * `:request_options` - default: [ssl: [{:versions, [:"tlsv1.2"]}]]
+    * `:ensure_domain_interval` - default: `0 secs (disabled)`
+    * `:request_options` - default: `[ssl: [{:versions, [:"tlsv1.2"]}]]`
 
   ## Mix: Cloudflare
 
@@ -48,24 +48,6 @@ defmodule Sitesx.App do
       quote do
         @app Application.get_env(:sitesx, :otp_app)
         @domain Application.get_env(:sitesx, :domain)
-        dns = Application.get_env(:sitesx, :dns) || []
-        @dns(case dns[:provider] || dns do
-          :digitalocean ->
-            Sitesx.DNS.Digitalocean
-
-          :cloudflare when not is_binary(dns) ->
-            Sitesx.DNS.Cloudflare
-
-          _ ->
-            raise ArgumentError,
-              "In :sitesx :provider was missing " <>
-              "configuration that value is `#{inspect dns}`"
-        end)
-
-        @doc """
-        dns function returns dns module from definition.
-        """
-        def dns,     do: @dns
 
         @doc """
         domain function returns domain name
@@ -75,7 +57,7 @@ defmodule Sitesx.App do
         @doc """
         helper function returns view heloper like Phoenix and Plug
         """
-        def helper, do: Module.concat @app, Router.Helpers
+        def helpers, do: Module.concat @app, Router.Helpers
 
         @doc """
         Ecto
@@ -85,7 +67,7 @@ defmodule Sitesx.App do
         @doc """
         repo function returns Sitesx model from your phoenix application.
         """
-        def site,    do: Module.concat @app, Sitesx
+        def site,    do: Module.concat @app, Site
       end
     end
   end

@@ -4,14 +4,14 @@ defmodule Sitesx.Q do
   """
   import Ecto.Query
 
-  alias Sitesx.App
+  alias Sitesx.{App, Domain}
 
   @doc """
   Find a record from subdomain name.
   """
   @spec findsite(Plug.Conn.t) :: Ecto.Query.t | nil
   def findsite(conn) do
-    if name = App.dns().extract_subdomain(conn) do
+    if name = Domain.extract_subdomain(conn) do
       from q in App.site(),
         where: q.name == ^name
     end
@@ -79,7 +79,7 @@ defmodule Sitesx.Q do
       changeset = apply site, :changeset, args
 
       new = repo.insert! changeset
-      App.dns().create_subdomain subdomain, domain
+      Domain.create_subdomain subdomain, domain
 
       {:new, new}
     end
@@ -91,10 +91,9 @@ defmodule Sitesx.Q do
   @spec ensure_domains :: :ok
   def ensure_domains do
     repo = App.repo
-    dns  = App.dns
 
     Enum.each App.site, fn s ->
-      bool = dns.ensured_subdomain?(s.name)
+      bool = Domain.ensured_subdomain?(s.name)
 
       Ecto.Changeset.change(s, dns: bool)
       |> repo.update

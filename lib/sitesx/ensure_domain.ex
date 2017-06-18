@@ -7,7 +7,11 @@ defmodule Sitesx.EnsureDomain do
       config :sitesx
         ensure_domain_interval: 5_000  # Default: 600_000 milliseconds (if want disable, set 0 number)
 
-  ## Database
+  ## Manually run
+
+      Sitesx.EnsureDomain.start_link
+
+  ## Database result
 
       postgres@(none):dbname_dev> select * from sitesx;
       +------+--------------+-------+----------------------------+----------------------------+

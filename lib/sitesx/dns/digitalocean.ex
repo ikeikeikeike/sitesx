@@ -4,15 +4,16 @@ defmodule Sitesx.DNS.Digitalocean do
 
   ## Example
 
-      iex(1)> dns = Sitesx.App.dns
-      Sitesx.DNS.Digitalocean
-      iex(2)> dns.
-      create_subdomain/1      create_subdomain/2      ensured_domain?/1
-      ensured_subdomain?/1    extract_domain/1        extract_subdomain/1
-
-      iex(2)> dns.create_subdomain "sub-domain"
+      iex(1)> Sitesx.Domain.
+      Base                    create_subdomain/1      create_subdomain/2
+      ensured_domain?/1       ensured_subdomain?/1    extract_domain/1
+      extract_subdomain/1
+      iex(1)> Sitesx.Domain.create_subdomain "subdomain-name"
+      {:ok, result}
   """
-  use Sitesx.DNS
+  @behaviour Sitesx.DNS
+
+  import Chexes, only: [blank?: 1]
 
   alias Sitesx.App
   alias Oceanex.Resource.DomainRecord
@@ -22,11 +23,11 @@ defmodule Sitesx.DNS.Digitalocean do
 
   ## Example
 
-      dns = Sitesx.App.dns
-      dns.create_subdomain "www"
+      Sitesx.Domain.create_subdomain "subdomain-name"
   """
-  @spec create_subdomain(subdomain::String.t, domain::String.t) :: {:ok, Response.t | AsyncResponse.t}
-                                                                 | {:error, Error.t}
+  @spec create_subdomain(subdomain::String.t, domain::String.t) ::
+    {:ok, Response.t | AsyncResponse.t | term} |
+    {:error, Error.t}
   def create_subdomain(subdomain, params \\ []) do
     {domain, _} = Keyword.pop params, :domain, App.domain
 

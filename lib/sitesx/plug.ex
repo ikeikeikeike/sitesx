@@ -2,6 +2,8 @@ defmodule Sitesx.Plug do
   @moduledoc """
   Stores Sitesx model into private on Plug struct.
 
+  A `Sitesx.Plug` module extracts domain information from request URL or `sub` queryparameter.
+
   ## Plug in Router
 
       defmodule MyApp.Router do
