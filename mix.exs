@@ -11,9 +11,11 @@ defmodule Sitesx.Mixfile do
      name: "Sitesx",
      version: "0.10.1",
      elixir: ">= 1.4.0",
+     elixirc_paths: elixirc_paths(Mix.env),
      description: @description,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     aliases: aliases(),
      package: package(),
      deps: deps(),
      source_url: "https://github.com/ikeikeikeike/sitesx"
@@ -58,7 +60,11 @@ defmodule Sitesx.Mixfile do
       {:chexes, "~> 0.1"},
       {:phoenix_html_simplified_helpers, "~> 1.1"},
 
-      {:credo, "~> 0.8", only: :dev},
+      {:postgrex, ">= 0.0.0", only: [:dev, :test]},
+      {:phoenix, "~> 1.3.0-rc.2", only: :test},
+        {:poison, "~> 2.0 or ~> 2.2 or >= 3.0.0"},
+
+      {:credo, "~> 0.8", only: [:dev, :test]},
       {:earmark, "~> 1.2", only: :dev},
       {:ex_doc, "~> 0.16", only: :dev},
       {:inch_ex, ">= 0.0.0",  only: :docs},
@@ -70,4 +76,12 @@ defmodule Sitesx.Mixfile do
      licenses: ["MIT"],
      links: %{"github" => "https://github.com/ikeikeikeike/sitesx"}]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
+  defp aliases do
+    ["test": ["ecto.drop --quiet", "ecto.create", "ecto.migrate", "test"]]
+  end
+
 end

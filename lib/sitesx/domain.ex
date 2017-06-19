@@ -32,7 +32,7 @@ defmodule Sitesx.Domain do
       Sitesx.Domain.extract_domain conn
       #-> "www"
   """
-  @spec extract_subdomain(Plug.Conn.t) :: boolean | String.t
+  @spec extract_subdomain(Plug.Conn.t) :: String.t | nil
   def extract_subdomain(conn) do
     domain = "#{registrable_domain(conn.host)}"
     prefix = String.replace conn.host, ~r/#{domain}|\./, ""
