@@ -81,7 +81,6 @@ defmodule Sitesx.Mixfile do
   defp elixirc_paths(_), do: ["lib"]
 
   defp aliases do
-    ["test": ["ecto.drop --quiet", "ecto.create", "ecto.migrate", "test"]]
+    ["test": ["ecto.drop --quiet", "ecto.create", "ecto.migrate", "run priv/repo/seeds.exs", "test"]]
   end
-
 end
