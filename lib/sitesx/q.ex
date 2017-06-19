@@ -85,7 +85,8 @@ defmodule Sitesx.Q do
   end
 
   @doc """
-  Get a record or create a record then returns a record with result key.
+  Get a record or create a record then returns a record with result key along with
+  create a `CNAME record` into DNS Provider when db record created.
 
   ## Example
 

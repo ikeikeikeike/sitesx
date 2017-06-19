@@ -1,3 +1,3 @@
 use Mix.Config
 
-import_config "#{Mix.env}.exs"
+import_config if(Mix.env == :test, do: "test.exs", else: "dev.exs")

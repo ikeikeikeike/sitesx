@@ -7,7 +7,8 @@ defmodule Sitesx.HelpersTest do
 
   test "basic without a ensured DNS record" do
     conn = get build_conn(), "/"
-    assert "http://example.com/?sub=www" == subdomain_url(conn, "home.index")
+    conn = Map.put conn, :host, "subdomain4.example.com"
+    assert "http://example.com/?sub=subdomain4" == subdomain_url(conn, "home.index")
   end
 
   test "basic with a ensured DNS record" do
@@ -24,6 +25,11 @@ defmodule Sitesx.HelpersTest do
   test "subdomain with a ensured DNS record" do
     conn = get build_conn(), "/"
     assert "http://subdomain3.example.com/" == subdomain_url("subdomain3", conn, "home.index")
+  end
+
+  test "query string without a ensured DNS record" do
+    conn = get build_conn(), "/"
+    assert "http://example.com/release/place-holder?some=1&sub=subdomain4&thing=2" == subdomain_url("subdomain4", conn, "entry.release:place-holder", some: "1", thing: "2")
   end
 
 end

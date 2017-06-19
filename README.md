@@ -178,6 +178,16 @@ end
 
 ## Usage
 
+#### Create a record
+
+Create `subdomain1` as `CNAME record` to DNS Provider which will be stored on Cloudflare or Digitalocean. And also will be stores that into database, too.
+
+```elixir
+{_, site} = Sitesx.Q.get_or_create("subdomain1")
+Repo.insert_or_update(entry, %{site_id: site.id})
+```
+
+#### Generate a URL
 
 Import module
 

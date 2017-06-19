@@ -46,12 +46,8 @@ defmodule Sitesx.DNS.Cloudflare do
   end
 
   defmodule API do
-    @moduledoc """
-    `list_dns_records`, `create_dns_record` functions.
+    @moduledoc false
 
-    - List: https://api.cloudflare.com/#dns-records-for-a-zone-list-dns-records
-    - Create: https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record
-    """
     use HTTPoison.Base
 
     @endpoint "https://api.cloudflare.com/client/v4"
@@ -60,6 +56,7 @@ defmodule Sitesx.DNS.Cloudflare do
       Path.join @endpoint, path
     end
 
+    @doc false
     def process_request_body(body) do
       case body do
         {:form, form} ->
@@ -69,16 +66,19 @@ defmodule Sitesx.DNS.Cloudflare do
       end
     end
 
+    @doc false
     def process_request_options(options) do
       Application.get_env(:sitesx, :request_options) || [ssl: [{:versions, [:"tlsv1.2"]}]]
       |> Keyword.merge([recv_timeout: 10_000, timeout: 10_000])
       |> Keyword.merge(options)
     end
 
+    @doc false
     def process_request_headers(headers) when is_map(headers) do
       process_request_headers Enum.into(headers, [])
     end
 
+    @doc false
     def process_request_headers(headers) do
       overwrite = [
         "X-Auth-Email": dns_env(:auth_email),
@@ -88,6 +88,7 @@ defmodule Sitesx.DNS.Cloudflare do
       Keyword.merge headers, overwrite
     end
 
+    @doc false
     def process_response_body(body) do
       case Poison.decode body do
         {:ok,    body}        -> body
@@ -96,10 +97,12 @@ defmodule Sitesx.DNS.Cloudflare do
       end
     end
 
+    @doc false
     defp transform(payload) do
       for {k, v} <- payload, into: [], do: {:"#{k}", v}
     end
 
+    @doc false
     defp dns_env(key) do
       App.parse_env Application.get_env(:sitesx, :dns)[key]
     end
