@@ -7,14 +7,28 @@ defmodule Sitesx.Q do
   alias Sitesx.{App, Domain}
 
   @doc """
-  Find a record from subdomain name.
+  Find a record from `Plug.Conn` or subdomain name
+
+  ## Example
+
+      Sitesx.Q.findstate(conn)
+      #-> %MyApp.Site{id: 1, name: "subdomain1", dns: true} or nil
+
+      Sitesx.Q.findstate("subdomain1")
+      #-> %MyApp.Site{id: 1, name: "subdomain1", dns: true} or nil
   """
-  @spec findsite(Plug.Conn.t) :: Ecto.Query.t | nil
-  def findsite(conn) do
+  @spec findsite(conn::Plug.Conn.t) :: Ecto.Query.t | nil
+  def findsite(%Plug.Conn{} = conn) do
     if name = Domain.extract_subdomain(conn) do
       from q in App.site(),
         where: q.name == ^name
     end
+  end
+
+  @spec findsite(name::String.t) :: Ecto.Query.t | nil
+  def findsite(name) do
+    from q in App.site(),
+      where: q.name == ^name
   end
 
   @doc """
@@ -46,7 +60,18 @@ defmodule Sitesx.Q do
   end
 
   @doc """
-  Make sure a record.
+  Like a exists query statement.
+
+  ## Example
+
+      queryable =
+        from q in MyApp.Site,
+          where: q.name == "subdomain1",
+
+      Sitesx.Q.exists?(queryable)
+      #-> true
+
+
   """
   @spec exists?(Ecto.Query.t) :: boolean
   def exists?(queryable) do
@@ -61,6 +86,16 @@ defmodule Sitesx.Q do
 
   @doc """
   Get a record or create a record then returns a record with result key.
+
+  ## Example
+
+      case Sitesx.Q.get_or_create("subdomain1") do
+        {:new, %MyApp.Site{} = site} ->
+          dosomething(site)
+
+        {:get, %MyApp.Site{} = site} ->
+          site
+      end
   """
   @spec get_or_create(Ecto.Query.t, String.t) :: {:get, term} | {:new, term}
   def get_or_create(subdomain, domain \\ nil) do
@@ -86,7 +121,7 @@ defmodule Sitesx.Q do
   end
 
   @doc """
-  To ensure dns record, which stores boolean to database.
+  To ensure all of dns record, which stores boolean to database.
   """
   @spec ensure_domains :: :ok
   def ensure_domains do

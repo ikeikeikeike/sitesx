@@ -77,7 +77,41 @@ $ mix sitesx.gen.model   # Until phoenix v1.2.x
 $ mix sitesx.gen.schema  # Phoenix v1.3.x
 ```
 
-5. Configuration
+5. Stores Sitesx model into private on Plug struct.
+
+A `Sitesx.Plug` module extracts domain information from request URL or `sub` queryparameter.
+
+Plug in Router
+
+```elixir
+defmodule MyApp.Router do
+  use MyApp.Web, :router
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+
+    plug Sitesx.Plug
+  end
+end
+```
+
+or
+
+Plug in Controller
+
+```elixir
+defmodule MyApp.MyController do
+  use MyApp.Web, :controller
+
+  plug Sitesx.Plug
+end
+```
+
+6. Configuration
 
 `Cloudflare`
 
@@ -110,7 +144,7 @@ hexdocs: https://hexdocs.pm/sitesx/Sitesx.App.html
 
 ## Customization
 
-Supposedly, those definition are still not enough to work on development. Therefore it will be changed is better that have `1:N` relation between one of a model and `Site` model.
+Obviously, those definition are still not enough to work on development. Therefore it will be changed is better that have `1:N` relation between one of a model and `Site` model.
 
 ```elixir
 defmodule MyApp.Entry do
@@ -126,7 +160,7 @@ defmodule MyApp.Entry do
 end
 ```
 
-and
+And then
 
 ```elixir
 defmodule MyApp.Site do
@@ -144,6 +178,37 @@ end
 
 ## Usage
 
+
+Import module
+
+```elixir
+# web/web.ex
+defmodule MyApp.Web do
+  def view do
+    quote do
+      use Phoenix.View, root: "web/templates"
+      ...
+      ...
+      ...
+      import Sitesx.Helpers
+    end
+  end
+end
+```
+
+Then call function
+
+```elixir
+subdomain_url(@conn, "entry.latest")
+#-> http://subdomain1.example.com/entries/latest or http://example.com/entries/latest?sub=subdomain1
+
+subdomain_url("subdomain2", @conn, "page.index")
+#-> http://subdomain2.example.com/entries/latest or http://example.com/entries/latest?sub=subdomain2
+```
+
+
+## Documentation
+
 #### `Sitesx.Domain` manages DNS record which has `detect`, `extract`, `create` method.
 
 hexdocs: https://hexdocs.pm/sitesx/Sitesx.Domain.html
@@ -160,6 +225,10 @@ hexdocs: https://hexdocs.pm/sitesx/Sitesx.Plug.html
 
 hexdocs: https://hexdocs.pm/sitesx/Sitesx.Q.html
 
-## Documentation
+#### `Sitesx.App`, Configuration from mix config and environment variable.
+
+hexdocs: https://hexdocs.pm/sitesx/Sitesx.App.html
+
+#### Documentation
 
 hexdocs: https://hexdocs.pm/sitesx

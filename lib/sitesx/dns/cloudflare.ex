@@ -15,6 +15,7 @@ defmodule Sitesx.DNS.Cloudflare do
 
   import Chexes, only: [blank?: 1]
 
+  alias Sitesx.App
   alias __MODULE__.API
 
   @doc """
@@ -100,13 +101,7 @@ defmodule Sitesx.DNS.Cloudflare do
     end
 
     defp dns_env(key) do
-      parse_env Application.get_env(:sitesx, :dns)[key]
-    end
-    defp parse_env({:system, env}) when is_binary(env) do
-      System.get_env(env) || ""
-    end
-    defp parse_env(env) do
-      env
+      App.parse_env Application.get_env(:sitesx, :dns)[key]
     end
 
     @doc """

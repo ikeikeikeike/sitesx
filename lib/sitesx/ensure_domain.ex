@@ -2,12 +2,12 @@ defmodule Sitesx.EnsureDomain do
   @moduledoc """
   Periocially ensures dns record to the Database.
 
-  ## Example
+  ## Automatically to run
 
       config :sitesx
         ensure_domain_interval: 5_000  # Default: 600_000 milliseconds (if want disable, set 0 number)
 
-  ## Manually run
+  ## Manually to run
 
       Sitesx.EnsureDomain.start_link
 

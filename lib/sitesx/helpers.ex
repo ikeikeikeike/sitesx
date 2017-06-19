@@ -3,6 +3,21 @@ defmodule Sitesx.Helpers do
   Generate URL with subdomain for controller or templates
   along with `Phoenix.HTML.SimplifiedHelpers.URL`
 
+  ## Import module
+
+      # web/web.ex
+      defmodule MyApp.Web do
+        def view do
+          quote do
+            use Phoenix.View, root: "web/templates"
+            ...
+            ...
+            ...
+            import Sitesx.Helpers
+          end
+        end
+      end
+
   ## Example
 
       subdomain_url(@conn, "entry.latest")
@@ -18,21 +33,32 @@ defmodule Sitesx.Helpers do
   alias Sitesx.{App, Domain}
   alias Phoenix.HTML.SimplifiedHelpers.URL
 
-  def subdomain_url(conn, ctrl_act_param, opts \\ [])
-
   @doc """
-  Generate URL from `Plug.Conn` struct
+  Generate URL from `Plug.Conn` struct or subdomain name
 
-  ## Call function with ensured DNS record.
+  ##### Call function with ensured DNS record.
 
       subdomain_url(@conn, "entry.latest")
       #-> http://subdomain1.example.com/entries/latest
 
-  ## Call function with not ensured DNS record.
+  ##### Call function with not ensured DNS record.
 
       subdomain_url(@conn, "entry.latest")
       #-> http://example.com/entries/latest?sub=subdomain1
+
+  ##### Call function with ensured DNS record.
+
+      subdomain_url("subdomain2", @conn, "entry.latest")
+      #-> http://subdomain2.example.com/entries/latest
+
+  ##### Call function with not ensured DNS record.
+
+      subdomain_url("subdomain2", @conn, "entry.latest")
+      #-> http://example.com/entries/latest?sub=subdomain2
+
   """
+  def subdomain_url(conn, ctrl_act_param, opts \\ [])
+
   @spec subdomain_url(conn::Plug.Conn.t, ctrl_act_param::String.t, opts::list) :: String.t
   def subdomain_url(%Plug.Conn{} = conn, ctrl_act_param, opts) do
     case Domain.extract_subdomain(conn) do
@@ -41,20 +67,6 @@ defmodule Sitesx.Helpers do
     end
   end
 
-  @doc """
-  Generate URL from subdomain name
-
-  ## Call function with ensured DNS record.
-
-      subdomain_url("subdomain2", @conn, "entry.latest")
-      #-> http://subdomain2.example.com/entries/latest
-
-  ## Call function with not ensured DNS record.
-
-      subdomain_url("subdomain2", @conn, "entry.latest")
-      #-> http://example.com/entries/latest?sub=subdomain2
-
-  """
   @spec subdomain_url(subdomain::String.t, conn::Plug.Conn.t, ctrl_act_param::String.t) :: String.t
   def subdomain_url(subdomain, conn, ctrl_act_param)
       when is_binary(subdomain) or is_atom(subdomain) do
@@ -64,15 +76,16 @@ defmodule Sitesx.Helpers do
   @doc """
   Generate URL with querystring from subdomain name
 
-  ## Call function with ensured DNS record.
+  ##### Call function with ensured DNS record.
 
       subdomain_url("subdomain2", @conn, "entry.latest", some: "query", unko: "query2")
       #-> http://subdomain2.example.com/entries/latest?some=query&unko=query2
 
-  ## Call function with not ensured DNS record.
+  ##### Call function with not ensured DNS record.
 
       subdomain_url("subdomain2", @conn, "entry.latest", some: "query", unko: "query2")
       #-> http://example.com/entries/latest?sub=subdomain2&some=query&unko=query2
+
   """
   @spec subdomain_url(subdomain::String.t, conn::Plug.Conn.t, ctrl_act_param::String.t, opts::list) :: String.t
   def subdomain_url(subdomain, conn, ctrl_act_param, opts) do

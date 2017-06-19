@@ -2,8 +2,6 @@ defmodule Sitesx.App do
   @moduledoc """
   Configuration from mix config and environment variable.
 
-  Search document from the data store matching the given query.
-
   ## Options
 
     * `:ensure_domain_interval` - default: `0 secs (disabled)`
@@ -30,7 +28,32 @@ defmodule Sitesx.App do
         request_options: [hackney: [pool: :cloudflare]],
         dns: :digitalocean
 
+      config :oceanex,
+        api_base_uri: "https://api.digitalocean.com/v2",
+        access_token: System.get_env("DIGITALOCEAN_ACCESS_TOKEN") || "",
+        decoder: :atoms
+
+  ## Environment Variable: Cloudflare
+
+      config :sitesx,
+        otp_app: MyApp,
+        domain: {:system, "MYAPP_DOMAIN"},
+        ensure_domain_interval: 300,
+        dns: [
+          provider: :cloudflare,
+          auth_email: {:system, "MYAPP_AUTH_EMAIL"},
+          auth_key: {:system, "MYAPP_AUTH_KEY"},
+          zone_identifier: {:system, "MYAPP_ZONE_IDENTIFIER"},
+        ]
+
   """
+
+  def parse_env({:system, env}) when is_binary(env) do
+    System.get_env(env) || ""
+  end
+  def parse_env(env) do
+    env
+  end
 
   @before_compile __MODULE__.Base
 
@@ -46,13 +69,14 @@ defmodule Sitesx.App do
 
     defmacro __before_compile__(_env) do
       quote do
+        alias Sitesx.App
+
         @app Application.get_env(:sitesx, :otp_app)
-        @domain Application.get_env(:sitesx, :domain)
 
         @doc """
         domain function returns domain name
         """
-        def domain,  do: @domain
+        def domain,  do: App.parse_env Application.get_env(:sitesx, :domain)
 
         @doc """
         helper function returns view heloper like Phoenix and Plug
@@ -70,5 +94,6 @@ defmodule Sitesx.App do
         def site,    do: Module.concat @app, Site
       end
     end
+
   end
 end
