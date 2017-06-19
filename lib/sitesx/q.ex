@@ -52,7 +52,7 @@ defmodule Sitesx.Q do
   """
   @spec with_site(Ecto.Query.t, Plug.Conn.t) :: Ecto.Query.t
   def with_site(queryable, conn) do
-    if site = conn.private.sitesx.model do
+    if site = conn.private.sitesx_model do
       from q in queryable, where: q.site_id == ^(site.id)
     else
       queryable
