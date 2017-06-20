@@ -90,6 +90,6 @@ defmodule Sitesx.EnsureDomain do
   defp interval do
     :sitesx
     |> Application.get_env(:ensure_domain_interval)
-    |> Kernel.||(300_000)
+    |> Kernel.||(600_000)
   end
 end

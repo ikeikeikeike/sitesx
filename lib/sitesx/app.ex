@@ -4,7 +4,7 @@ defmodule Sitesx.App do
 
   ## Options
 
-    * `:ensure_domain_interval` - default: `0 secs (disabled)`
+    * `:ensure_domain_interval` - default: `600_000 millisecond (if want disable, set 0 number)`
     * `:request_options` - default: `[ssl: [{:versions, [:"tlsv1.2"]}]]`
 
   ## Mix: Cloudflare
@@ -12,7 +12,7 @@ defmodule Sitesx.App do
       config :sitesx,
         otp_app: MyApp,
         domain: "example.com",
-        ensure_domain_interval: 300,
+        ensure_domain_interval: 300_000,
         dns: [
           provider: :cloudflare,
           auth_email: "mail@example.com",
@@ -38,7 +38,7 @@ defmodule Sitesx.App do
       config :sitesx,
         otp_app: MyApp,
         domain: {:system, "MYAPP_DOMAIN"},
-        ensure_domain_interval: 300,
+        ensure_domain_interval: 300_000,
         dns: [
           provider: :cloudflare,
           auth_email: {:system, "MYAPP_AUTH_EMAIL"},
