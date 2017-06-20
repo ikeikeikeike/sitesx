@@ -9,7 +9,7 @@ otp_release:
 
 script:
   - yes | mix deps.get
-  - yes | MIX_ENV=test mix test
+  - MIX_ENV=test mix test
 
 after_script:
   - mix deps.get --only docs

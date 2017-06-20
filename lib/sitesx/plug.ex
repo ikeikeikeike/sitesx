@@ -35,7 +35,7 @@ defmodule Sitesx.Plug do
 
   def init(opts), do: opts
   def call(conn, _opts) do
-    with qs when not is_nil(qs) <- Q.findsite(conn),
+    with qs when not is_nil(qs) <- Q.site(conn),
          md when not is_nil(md) <- App.repo().one(qs)
     do
       put_private conn, :sitesx_model, md

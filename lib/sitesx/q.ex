@@ -12,21 +12,22 @@ defmodule Sitesx.Q do
   ## Example
 
       Sitesx.Q.findstate(conn)
-      #-> %MyApp.Site{id: 1, name: "subdomain1", dns: true} or nil
+      #-> #Ecto.Query<from s in MyApp.Site, where: s.name == ^"subdomain1">
 
       Sitesx.Q.findstate("subdomain1")
-      #-> %MyApp.Site{id: 1, name: "subdomain1", dns: true} or nil
+      #-> #Ecto.Query<from s in MyApp.Site, where: s.name == ^"subdomain1">
+
   """
-  @spec findsite(conn::Plug.Conn.t) :: Ecto.Query.t | nil
-  def findsite(%Plug.Conn{} = conn) do
+  @spec site(conn::Plug.Conn.t) :: Ecto.Query.t | nil
+  def site(%Plug.Conn{} = conn) do
     if name = Domain.extract_subdomain(conn) do
       from q in App.site(),
         where: q.name == ^name
     end
   end
 
-  @spec findsite(name::String.t) :: Ecto.Query.t | nil
-  def findsite(name) do
+  @spec site(name::String.t) :: Ecto.Query.t | nil
+  def site(name) do
     from q in App.site(),
       where: q.name == ^name
   end
