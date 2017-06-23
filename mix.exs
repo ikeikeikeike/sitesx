@@ -9,7 +9,7 @@ defmodule Sitesx.Mixfile do
   def project do
     [app: :sitesx,
      name: "Sitesx",
-     version: "0.10.1",
+     version: "0.10.2",
      elixir: ">= 1.4.0",
      elixirc_paths: elixirc_paths(Mix.env),
      description: @description,

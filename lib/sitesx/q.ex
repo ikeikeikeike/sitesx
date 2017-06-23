@@ -51,7 +51,7 @@ defmodule Sitesx.Q do
         end
       end
   """
-  @spec with_site(Ecto.Query.t, Plug.Conn.t) :: Ecto.Query.t
+  @spec with_site(queryable::Ecto.Query.t, conn::Plug.Conn.t) :: Ecto.Query.t
   def with_site(queryable, conn) do
     if site = conn.private.sitesx_model do
       from q in queryable, where: q.site_id == ^(site.id)
@@ -74,7 +74,7 @@ defmodule Sitesx.Q do
 
 
   """
-  @spec exists?(Ecto.Query.t) :: boolean
+  @spec exists?(queryable::Ecto.Query.t) :: boolean
   def exists?(queryable) do
     queryable
     |> from(select: 1, limit: 1)
@@ -99,8 +99,8 @@ defmodule Sitesx.Q do
           site
       end
   """
-  @spec get_or_create(Ecto.Query.t, String.t) :: {:get, term} | {:new, term}
-  def get_or_create(subdomain, domain \\ nil) do
+  @spec get_or_create(subdomain::Ecto.Query.t, domain::list) :: {:get, term} | {:new, term}
+  def get_or_create(subdomain, domain \\ []) do
     site = App.site()
     repo = App.repo()
 
