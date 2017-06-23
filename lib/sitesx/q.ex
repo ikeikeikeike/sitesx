@@ -127,9 +127,10 @@ defmodule Sitesx.Q do
   """
   @spec ensure_domains :: :ok
   def ensure_domains do
-    repo = App.repo
+    repo = App.repo()
+    site = App.site()
 
-    Enum.each App.site, fn s ->
+    Enum.each repo.all(site), fn s ->
       bool = Domain.ensured_subdomain?(s.name)
 
       Ecto.Changeset.change(s, dns: bool)
