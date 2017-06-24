@@ -1,6 +1,6 @@
 defmodule Sitesx.Domain do
   @moduledoc """
-  `Sitesx.Domain` manages DNS record which has `detect`, `extract`, `create` method.
+  `Sitesx.Domain` manages DNS record which has `detect`, `extract`, `create` method on DNS Provider.
   """
   import PublicSuffix
   import Chexes, only: [present?: 1]
