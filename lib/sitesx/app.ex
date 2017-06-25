@@ -16,8 +16,8 @@ defmodule Sitesx.App do
         dns: [
           provider: :cloudflare,
           auth_email: "mail@example.com",
-          auth_key: "hash-key1",
-          zone_identifier: "hash-key1",
+          auth_key: "1234567893feefc5f0q5000bfo0c38d90bbeb",
+          zone_identifier: "3d9313b646b8cc1ieb5b4c73a9aae20c",
         ]
 
   ## Mix: Digitalocean
@@ -26,24 +26,33 @@ defmodule Sitesx.App do
         otp_app: MyApp,
         domain: "example.com",
         request_options: [hackney: [pool: :cloudflare]],
-        dns: :digitalocean
-
-      config :oceanex,
-        api_base_uri: "https://api.digitalocean.com/v2",
-        access_token: System.get_env("DIGITALOCEAN_ACCESS_TOKEN") || "",
-        decoder: :atoms
+        dns: [
+          provider: :digitalocean,
+          auth_key: "b7d03a6947b217efb6f3ec3bd3504582",
+        ]
 
   ## Environment Variable: Cloudflare
 
       config :sitesx,
         otp_app: MyApp,
-        domain: {:system, "MYAPP_DOMAIN"},
+        domain: "example.com",
         ensure_domain_interval: 300_000,
         dns: [
           provider: :cloudflare,
           auth_email: {:system, "MYAPP_AUTH_EMAIL"},
           auth_key: {:system, "MYAPP_AUTH_KEY"},
           zone_identifier: {:system, "MYAPP_ZONE_IDENTIFIER"},
+        ]
+
+  ## Environment Variable: Digitalocean
+
+      config :sitesx,
+        otp_app: MyApp,
+        domain: "example.com",
+        ensure_domain_interval: 300_000,
+        dns: [
+          provider: :cloudflare,
+          auth_key: {:system, "MYAPP_AUTH_KEY"},
         ]
 
   """

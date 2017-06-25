@@ -68,6 +68,7 @@ defmodule Sitesx.DNS do
 
   `POST zones/:zone_identifier/dns_records`
 
+  [Documentation](https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record)
 
   """
   alias HTTPoison.{Response, AsyncResponse}
