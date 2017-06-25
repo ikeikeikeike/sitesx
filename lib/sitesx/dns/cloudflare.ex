@@ -5,7 +5,7 @@ defmodule Sitesx.DNS.Cloudflare do
 
   @doc false
   def create_subdomain(subdomain, params \\ []) do
-    case dns_records(params) do
+    case dns_records params do
       {:ok, %{body: %{"success" => true, "result" => records}}} ->
         if blank? Enum.filter(records, &String.starts_with?(&1["name"], "#{subdomain}.")) do
           create_dns_record name: subdomain
@@ -21,6 +21,7 @@ defmodule Sitesx.DNS.Cloudflare do
     end
   end
 
+  # TODO: Pagination
   @doc false
   def dns_records(params \\ []) do
     params        = transform params

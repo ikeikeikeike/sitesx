@@ -2,30 +2,18 @@ defmodule Sitesx.DNS.Digitalocean do
   @moduledoc false
 
   use Sitesx.DNS, endpoint: "https://api.digitalocean.com/v2"
-  alias Sitesx.App
 
   @doc false
   def create_subdomain(subdomain, params \\ []) do
-    {domain, _} = Keyword.pop params, :domain, App.domain
-
-    case dns_records(domain) do
-      {:ok, %{body: %{domain_records: records}}} ->
-        if blank? Enum.filter(records, & &1[:name] == domain) do
-          record =
-            records
-            |> Enum.filter(& &1[:name] == "@")
-            |> Enum.filter(& &1[:type] == "A")
-            |> List.first
-            |> Kernel.||(%{})
-            |> Map.delete(:id)
-            |> Map.merge(%{name: subdomain})
-
-          DomainRecord.create_dns_record domain, record
+    case dns_records params do
+      {:ok, %{body: %{"domain_records" => records}}} ->
+        if blank? Enum.filter(records, & &1["name"] == subdomain and &1["type"] == "CNAME") do
+          create_dns_record name: subdomain
         else
           {:error, "duplicated subdomain"}
         end
 
-      {:ok, %{body: %{id: reason}}} ->
+      {:ok, %{body: %{"id" => reason}}} ->
         {:error, reason}
 
       unknown ->
@@ -33,19 +21,13 @@ defmodule Sitesx.DNS.Digitalocean do
     end
   end
 
+  # TODO: Pagination
   @doc false
   def dns_records(params \\ []) do
     params        = transform params
     {domain, params} = Keyword.pop params, :domain, Application.get_env(:sitesx, :domain)
 
-    params =
-      Keyword.merge(params, [
-        page: 1, per_page: 100,
-        order: "type",
-        direction: "asc",
-      ])
-
-    get "/v2/domains/#{domain}/records", [], params:  params
+    get "/domains/#{domain}/records", [], params:  params
   end
 
   @doc false
@@ -57,13 +39,12 @@ defmodule Sitesx.DNS.Digitalocean do
     params =
       Keyword.merge(params, [
         type: "CNAME",
-        name: "#{name}.#{domain}",
-        content: domain,
-        proxied: true,
+        name: name,
+        data: "#{domain}.",
       ])
 
     body = Poison.encode! Enum.into(params, %{})
-    post "/v2/domains/#{domain}/records", body
+    post "/domains/#{domain}/records", body
   end
 
   @doc false

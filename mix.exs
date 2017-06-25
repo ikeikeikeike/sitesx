@@ -53,7 +53,6 @@ defmodule Sitesx.Mixfile do
 
       # Below is just update to mix file's package version.
       {:httpoison, ">= 0.11.1"},
-      {:oceanex, github: "ikeikeikeike/oceanex", branch: "feature/update-mix"},
       {:public_suffix, github: "ikeikeikeike/publicsuffix-elixir", branch: "topic/update-mix"},
 
       {:con_cache, "~> 0.12"},
