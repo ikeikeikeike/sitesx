@@ -99,7 +99,10 @@ defmodule Sitesx.Q do
           site
       end
   """
-  @spec get_or_create(subdomain::Ecto.Query.t, domain::list) :: {:get, term} | {:new, term}
+  @spec get_or_create(subdomain::Ecto.Query.t, domain::list) ::
+    {:get, term} |
+    {:new, term} |
+    {:error, String.t | {:error, Error.t}}
   def get_or_create(subdomain, domain \\ []) do
     site = App.site()
     repo = App.repo()
@@ -115,10 +118,12 @@ defmodule Sitesx.Q do
       args      = [struct(site), %{"name" => subdomain}]
       changeset = apply site, :changeset, args
 
-      new = repo.insert! changeset
-      Domain.create_subdomain subdomain, domain
-
-      {:new, new}
+      with {:ok, _mm} <- Domain.create_subdomain(subdomain, domain),
+           {:ok, new} <- repo.insert(changeset) do
+        {:new, new}
+      else error ->
+        error
+      end
     end
   end
 
