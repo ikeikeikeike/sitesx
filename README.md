@@ -210,10 +210,12 @@ Then call function
 
 ```elixir
 subdomain_url(@conn, "entry.latest")
-#-> http://subdomain1.example.com/entries/latest or http://example.com/entries/latest?sub=subdomain1
+#-> Ensured domain: http://subdomain1.example.com/entries/latest
+#-> Not ensured domain: http://example.com/entries/latest?sub=subdomain1
 
 subdomain_url("subdomain2", @conn, "page.index")
-#-> http://subdomain2.example.com/entries/latest or http://example.com/entries/latest?sub=subdomain2
+#-> Ensured domain: http://subdomain2.example.com/entries/latest
+#-> Not ensured domain: http://example.com/entries/latest?sub=subdomain2
 ```
 
 
